@@ -3,10 +3,10 @@ from functools import partial
 
 import torch
 import torch.nn as nn
-from models.networks.encoder.utils.utils import trunc_normal_, PatchDropout
+from anysat.models.networks.encoder.utils.utils import trunc_normal_, PatchDropout
 
-from models.networks.encoder.utils.utils_ViT import CrossRPEBlock, Block
-from models.networks.encoder.utils.pos_embed import get_2d_sincos_pos_embed_with_scale
+from anysat.models.networks.encoder.utils.utils_ViT import CrossRPEBlock, Block
+from anysat.models.networks.encoder.utils.pos_embed import get_2d_sincos_pos_embed_with_scale
 
 class AnyModule(nn.Module):
     """

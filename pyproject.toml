@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anysat"
+version = "0.1.0"
+requires-python = ">=3.8"
+dependencies = [
+  "torch>=2.0.0",
+  "einops",
+  "lightning",
+  "hydra-core",
+  "numpy",
+  "pandas",
+  "geopandas>=0.13",
+  "shapely>=2.0",
+  "timm",
+  "easydict",
+  "rasterio",
+  "torchmetrics",
+]
+
+[tool.setuptools]
+py-modules = ["hubconf"]
+
+[tool.setuptools.packages.find]
+include = ["anysat", "anysat.*"]

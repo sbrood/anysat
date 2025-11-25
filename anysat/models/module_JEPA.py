@@ -4,7 +4,7 @@ import copy
 import pandas as pd
 import torch.nn.functional as F
 
-from models.networks.encoder.Transformer import repeat_interleave_batch, apply_masks
+from anysat.models.networks.encoder.Transformer import repeat_interleave_batch, apply_masks
 from utils.mask_collator import MaskCollator, MaskCollatorNaive
 
 class Module(LightningModule):
