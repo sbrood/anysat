@@ -95,27 +95,37 @@ class AnySat(nn.Module):
             self.model = self.model.to(device)
 
     @classmethod
-    def from_pretrained(cls, model_size="base", **kwargs):
-        """
-        Create a pretrained AnySat model
-
-        Args:
-            model_size (str): Model size - 'tiny', 'small', or 'base'
-            **kwargs: Additional arguments passed to the constructor
-        """
+    def from_pretrained(cls, model_size="base", ckpt_path=None, **kwargs):
         model = cls(model_size=model_size, **kwargs)
-
         checkpoint_urls = {
             "base": "https://huggingface.co/g-astruc/AnySat/resolve/main/models/AnySat.pth",
-            # 'small': 'https://huggingface.co/gastruc/anysat/resolve/main/anysat_small_geoplex.pth', COMING SOON
-            # 'tiny': 'https://huggingface.co/gastruc/anysat/resolve/main/anysat_tiny_geoplex.pth' COMING SOON
         }
 
-        checkpoint_url = checkpoint_urls[model_size]
-        state_dict = torch.hub.load_state_dict_from_url(checkpoint_url, progress=True)[
-            "state_dict"
-        ]
+        module_dir = os.path.dirname(__file__)
+        module_ckpt = os.path.join(module_dir, "anysat_base.ckpt")
+        if os.path.isfile(module_ckpt):
+            print(
+                f"[Anysat] Loading checkpoint from current working directory: {module_ckpt}"
+            )
+            raw_checkpoint = torch.load(module_ckpt, map_location="cpu")
 
+        elif ckpt_path is not None:
+            print(f"[Anysat] Loading checkpoint from provided path: {ckpt_path}")
+            if not os.path.isfile(ckpt_path):
+                raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
+            raw_checkpoint = torch.load(ckpt_path, map_location="cpu")
+
+        else:
+            print(
+                f"[Anysat] Downloading checkpoint from hub for model size '{model_size}'"
+            )
+            raw_checkpoint = torch.hub.load_state_dict_from_url(
+                checkpoint_urls[model_size],
+                progress=True,
+                map_location="cpu",
+            )
+
+        state_dict = raw_checkpoint["state_dict"]
         model.model.load_state_dict(state_dict)
         return model
 
